@@ -1,0 +1,30 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/
+build/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.venv/
+
+# VSCode / IDEs
+.vscode/
+.idea/
+
+# Docker
+*.log
+*.pid
+*.seed
+*.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db

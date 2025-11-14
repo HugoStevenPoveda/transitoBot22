@@ -1,0 +1,344 @@
+version: "3.1"
+nlu:
+  - intent: saludo
+    examples: |
+      - hola
+      - buenos días
+      - buenas tardes
+      - buenas noches
+      - qué tal
+      - cómo estás
+      - hey
+      - hola, qué más
+      - hola, cómo vas
+      - saludos
+      - buen día
+      - holaaa
+      - hola amigo
+      - hola bot
+      - hola asistente
+
+  - intent: despedida
+    examples: |
+      - adiós
+      - chao
+      - hasta luego
+      - nos vemos
+      - que estés bien
+      - hablamos luego
+      - bye
+      - hasta pronto
+      - cuidate
+      - nos vemos después
+      - gracias, chao
+      - me voy
+      - ya hablamos
+      - hasta la próxima
+      - que tengas buen día
+
+  - intent: preguntar_fotomulta
+    examples: |
+      - ¿tengo una fotomulta?
+      - quiero saber si tengo fotomultas
+      - consulta mis fotomultas
+      - ¿cómo miro mis fotomultas?
+      - revisa si tengo fotocomparendos
+      - tengo una multa por cámara
+      - cómo saber si me multaron por cámara
+      - consulta mis comparendos electrónicos
+      - quiero verificar si tengo infracciones automáticas
+      - cómo mirar comparendos por placa
+      - revisa comparendos de mi vehículo
+      - consulta multas con mi cédula
+      - revisa si tengo una infracción registrada
+      - cómo saber si tengo sanciones de tránsito
+      - consulta mis sanciones
+
+  - intent: plazo_fotomulta
+    examples: |
+      - ¿cuál es el plazo para pagar una fotomulta?
+      - cuánto tiempo tengo para pagar la fotomulta
+      - hasta cuándo puedo pagar el comparendo electrónico
+      - fecha límite de pago de fotomulta
+      - cuánto tiempo tengo antes de que suba de precio
+      - plazo para pagar descuento del 50%
+      - plazo para pagar con descuento del 25%
+      - cuándo vence la fotomulta
+      - tiempo máximo para pagar la infracción
+      - cuánto dura vigente la fotomulta
+      - me vence hoy la fotomulta
+      - si no pago la fotomulta qué pasa
+      - cuándo se genera mora
+      - plazo legal para pagar comparendo
+      - tiempo límite para pagar sanción
+
+  - intent: descuentos_fotomulta
+    examples: |
+      - ¿hay descuento para fotomultas?
+      - descuento del 50% aplica para quién
+      - cómo obtener descuento en fotomulta
+      - descuento del 25% de comparendos
+      - requisitos para descuentos
+      - dónde pagar con descuento
+      - tengo derecho al descuento
+      - cómo acceder al descuento por curso
+      - si hago el curso me dan descuento
+      - descuento por pronto pago
+      - cuánto es el descuento de la multa por cámara
+      - puedo pagar con rebaja
+      - cómo hago el curso para descuento
+      - el curso reduce la multa
+      - necesito descuento en mi infracción
+
+  - intent: impugnar_fotomulta
+    examples: |
+      - quiero impugnar una fotomulta
+      - cómo apelar una fotomulta
+      - quiero controvertir un comparendo electrónico
+      - cómo defenderme de una fotomulta
+      - dónde impugno el comparendo
+      - cita para audiencia de fotomulta
+      - presentación de descargos fotomulta
+      - quiero anular la fotomulta
+      - cómo tumbar una fotomulta
+      - cómo demostrar que yo no manejaba
+      - proceso para impugnar comparendo
+      - cómo peleo esta multa
+      - necesito audiencia con tránsito
+      - qué pruebas necesito para impugnar
+      - cómo solicito audiencia
+
+  - intent: costos_fotomulta
+    examples: |
+      - ¿cuánto vale una fotomulta?
+      - precio del comparendo por cámara
+      - cuánto cuesta la infracción
+      - cuál es el valor del comparendo
+      - valor actual de las fotomultas
+      - precio según el SMLV
+      - cuánto debo pagar por esa multa
+      - valor con descuento
+      - cuánto vale sin descuento
+      - cuánto debo pagar exactamente
+      - tarifas de comparendos electrónicos
+      - cuánto está costando la infracción
+      - valor sanción por cámara
+      - precio de la multa de tránsito
+      - valor actualizado del comparendo
+
+  # Intents futuros (para próximas historias)
+  - intent: consultar_notificacion
+    examples: |
+      - ¿Cómo me llega la notificación de una fotomulta?
+      - ¿Por dónde notifican una fotomulta?
+      - ¿La notificación llega por correo?
+      - ¿Cómo sé si me notificaron la fotomulta?
+      - ¿Qué pasa si nunca me notificaron?
+      - ¿Dónde puedo ver la notificación?
+      - ¿La notificación debe ser física?
+      - ¿Cuándo llega la notificación?
+      - ¿Cómo funciona la notificación en Colombia?
+      - ¿La notificación vence?
+      - ¿Qué hago si no fui notificado?
+      - Quiero saber sobre la notificación
+      - ¿Qué dice la ley sobre notificación?
+      - ¿La notificación por correo es válida?
+      - ¿Qué tipo de notificación me deben hacer?
+
+  - intent: consultar_propietario_conductor
+    examples: |
+      - ¿Quién debe pagar la fotomulta, el dueño o el conductor?
+      - Yo no era quien conducía, ¿qué hago?
+      - ¿La multa la paga el propietario?
+      - ¿Qué pasa si presté el carro y llegó fotomulta?
+      - ¿Qué responsabilidad tiene el conductor?
+      - ¿Cómo demuestro que no iba manejando?
+      - ¿Puedo transferir la responsabilidad?
+      - ¿Qué dice la ley sobre propietario y conductor?
+      - ¿Puedo impugnar si no era yo?
+      - ¿Qué pasa si el conductor no aparece?
+      - ¿Se puede cambiar el responsable?
+      - ¿Quién es el infractor legalmente?
+      - ¿Qué pasa si vendo el vehículo?
+      - ¿Cómo funciona la responsabilidad solidaria?
+      - ¿El propietario siempre paga?
+
+  - intent: consultar_suspension_licencia
+    examples: |
+      - ¿Me pueden suspender la licencia por una fotomulta?
+      - ¿Las fotomultas afectan la licencia?
+      - ¿Puedo quedar sancionado por puntos?
+      - ¿Las cámaras quitan puntos?
+      - ¿Las fotomultas afectan el RUNT?
+      - ¿Qué pasa con mi licencia por estas multas?
+      - ¿Me bloquean la licencia?
+      - ¿Las fotomultas generan comparendo con curso?
+      - ¿Qué sanciones trae una fotomulta?
+      - ¿Me pueden inmovilizar el vehículo?
+      - ¿Una fotomulta afecta el pase?
+      - ¿Hay suspensión de licencia por cámaras?
+      - ¿Qué impacto tiene esto en mi licencia?
+      - ¿Puedo perder la licencia por multas?
+      - ¿Las fotomultas generan antecedentes?
+
+  - intent: consultar_estado_fotomulta
+    examples: |
+      - ¿Cómo verifico si tengo fotomultas?
+      - ¿Dónde consulto mis fotomultas?
+      - ¿Cómo veo si tengo comparendos?
+      - ¿Hay alguna multa pendiente?
+      - Necesito revisar mi estado de multas
+      - ¿Tengo alguna fotomulta registrada?
+      - ¿Cómo revisar por placa?
+      - ¿Dónde consultar por cédula?
+      - ¿Qué páginas sirven para consultar?
+      - ¿Cómo veo mis multas en el SIMIT?
+      - ¿Cómo ver comparendos activos?
+      - ¿Hay fotomultas en mi historial?
+      - Quiero ver mis infracciones
+      - ¿Cómo sé si ya está cargada la multa?
+      - ¿La fotomulta aparece inmediatamente?
+
+  - intent: consultar_proceso_cobro
+    examples: |
+      - ¿Qué pasa si no pago una fotomulta?
+      - ¿Cómo es el proceso de cobro?
+      - ¿Me pueden embargar por fotomultas?
+      - ¿El cobro pasa a jurídico?
+      - ¿Cuánto tarda el cobro?
+      - ¿Qué consecuencias hay por no pagar?
+      - ¿Me reportan por no pagar?
+      - ¿Pueden inclinar mi deuda?
+      - ¿Esto se pasa a cobro coactivo?
+      - ¿Qué hace la secretaría con la deuda?
+      - ¿Puedo llegar a acuerdo de pago?
+      - ¿Hay intereses?
+      - ¿Puedo quedar con problemas legales?
+      - ¿Qué hace tránsito cuando no pago?
+      - ¿Qué riesgo hay por dejar vencer?
+
+  - intent: consultar_curso_pedagogico
+    examples: |
+      - ¿Las fotomultas permiten curso pedagógico?
+      - ¿Puedo hacer curso para descuento?
+      - ¿Dónde hago el curso?
+      - ¿Qué requisitos tiene el curso?
+      - ¿El curso aplica para cámaras?
+      - ¿Los descuentos aplican con curso?
+      - ¿Cómo funciona el curso de tránsito?
+      - ¿Puedo hacer el curso virtual?
+      - ¿Cuánto dura el curso?
+      - ¿El curso sirve para evitar sanciones?
+      - ¿Cómo programar un curso?
+      - ¿El curso es obligatorio?
+      - ¿Qué hago si no puedo asistir?
+      - ¿Qué entidad dicta el curso?
+      - ¿Qué beneficios tiene el curso?
+
+  - intent: consultar_validez_fotomulta
+    examples: |
+      - ¿Cómo sé si una fotomulta es válida?
+      - ¿Qué requisitos debe tener la fotomulta?
+      - ¿La fotomulta está mal tomada?
+      - ¿Cómo reviso si es legal?
+      - ¿La cámara debe estar certificada?
+      - ¿Qué dice la norma sobre cámaras?
+      - ¿La fotomulta puede ser anulada?
+      - ¿Qué pasa si la foto está borrosa?
+      - ¿La señal está visible?
+      - ¿La cámara estaba calibrada?
+      - ¿Qué pasa si no cumple requisitos?
+      - ¿Cómo verificar la legalidad?
+      - ¿La ubicación es válida?
+      - ¿Qué argumentos sirven para impugnar?
+      - ¿Cómo revisar los detalles técnicos?
+
+  - intent: consultar_tiempos_proceso
+    examples: |
+      - ¿Cuánto tarda en llegar una fotomulta?
+      - ¿En cuánto tiempo cargan la infracción?
+      - ¿Cuándo aparece en el sistema?
+      - ¿Cuánto tarda el SIMIT en reflejarla?
+      - ¿En qué tiempo notifican?
+      - ¿Cuándo puedo pagar?
+      - ¿Qué tiempos maneja la ley?
+      - ¿Cuándo prescribe?
+      - ¿Cuánto dura el proceso?
+      - ¿Tarda mucho en registrarse?
+      - ¿Cuándo inicia el conteo de días?
+      - ¿Cuánto tiempo tiene tránsito?
+      - ¿El término puede vencer?
+      - ¿Qué pasa si se pasan del tiempo?
+      - ¿La multa queda inválida si se demoran?
+
+  - intent: consultar_prescripcion
+    examples: |
+      - ¿Cuándo prescribe una fotomulta?
+      - ¿En cuántos años prescribe?
+      - ¿Cómo funciona la prescripción?
+      - ¿Qué pasa si ya prescribió?
+      - ¿Puedo pedir prescripción?
+      - ¿Cuántos años tiene tránsito para cobrar?
+      - ¿La deuda puede desaparecer?
+      - ¿Qué dice la ley sobre prescripción?
+      - ¿Puedo solicitar prescripción por escrito?
+      - ¿La prescripción aplica para cámaras?
+      - ¿El cobro se cae si prescribe?
+      - ¿Qué requisitos hay para alegarla?
+      - ¿Cómo saber si ya prescribió?
+      - ¿Desde cuándo cuenta el tiempo?
+      - ¿Qué autoridad declara la prescripción?
+
+  - intent: consultar_documentos_requeridos
+    examples: |
+      - ¿Qué documentos necesito para impugnar?
+      - ¿Qué papeles debo llevar?
+      - ¿Qué requisitos piden?
+      - ¿Necesito abogado?
+      - ¿Qué evidencia debo aportar?
+      - ¿Debo llevar la licencia?
+      - ¿Qué documentos acepta tránsito?
+      - ¿Qué debo anexar a la solicitud?
+      - ¿Qué pruebas sirven?
+      - ¿Qué exige el artículo 137?
+      - ¿Qué pruebas puedo pedir?
+      - ¿Qué documentos valida el inspector?
+      - ¿Necesito fotocopia de la cédula?
+      - ¿Se requiere contrato de compraventa?
+      - ¿Debo anexar certificado de tradición?
+
+  - intent: consultar_compra_venta
+    examples: |
+      - Compré un carro y tiene fotomultas, ¿qué hago?
+      - ¿Quién paga las multas después de la venta?
+      - ¿Las fotomultas quedan al nuevo dueño?
+      - ¿Qué pasa si vendo el carro con fotomultas?
+      - ¿Puedo exigir que las paguen antes de la venta?
+      - ¿Cómo evitar problemas al comprar un carro?
+      - ¿Las fotomultas siguen al vehículo?
+      - ¿Debo verificar antes de comprar?
+      - ¿Cómo revisar multas antes de comprar?
+      - ¿Qué hago si descubrí fotomultas después?
+      - ¿El antiguo dueño debe responder?
+      - ¿Qué pasa si firmé sin revisar?
+      - ¿Puedo reclamar al vendedor?
+      - ¿Cómo probar que son anteriores?
+      - ¿Qué dice la ley sobre compra y venta?
+
+  - intent: consultar_inmovilizacion
+    examples: |
+      - ¿Pueden inmovilizar el carro por fotomultas?
+      - ¿Qué pasa si tengo varias multas?
+      - ¿Me pueden quitar el carro?
+      - ¿Inmovilizan por cámaras?
+      - ¿La inmovilización aplica a fotomultas?
+      - ¿Qué dice tránsito sobre esto?
+      - ¿Pueden detenerme por tener multas?
+      - ¿El vehículo queda bloqueado?
+      - ¿Qué riesgo tengo de inmovilización?
+      - ¿Me pueden retener los papeles?
+      - ¿La policía puede quitar el vehículo?
+      - ¿Puedo circular con multas pendientes?
+      - ¿Inmovilizan cuando hay deuda?
+      - ¿Qué casos aplican inmovilización?
+      - ¿Esto procede para cámaras?

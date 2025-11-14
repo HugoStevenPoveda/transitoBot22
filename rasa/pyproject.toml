@@ -1,0 +1,15 @@
+[project]
+name = "rasa-chatbot-es"
+version = "0.1.0"
+description = "Chatbot en español con Rasa y spaCy (modelo grande)"
+readme = "README.md"
+requires-python = ">=3.9"
+
+dependencies = [
+    "rasa==3.6.21",
+    "rasa-sdk==3.6.2",
+    "spacy>=3.7.0",
+    "es-core-news-lg @ https://github.com/explosion/spacy-models/releases/download/es_core_news_lg-3.7.0/es_core_news_lg-3.7.0-py3-none-any.whl",
+    "jinja2>=3.1.0",
+    "pyyaml>=6.0",
+]

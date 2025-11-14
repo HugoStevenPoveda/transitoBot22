@@ -1,0 +1,16 @@
+{% include 'base_cot.j2' %}
+
+**CATEGORÍA:** Fotomultas
+
+{% if responses %}
+**INFO OFICIAL:**
+{% for response_key, response_text in responses.items() %}
+{{ response_text | truncate_text(200) }}
+
+{% endfor %}
+{% endif %}
+
+**INSTRUCCIONES:**
+- Responde CONCISO (máximo 3 párrafos)
+- Lista documentos principales
+- Menciona: formatos digitales, consecuencias de no portarlos

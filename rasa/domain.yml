@@ -1,0 +1,60 @@
+version: "3.1"
+
+intents:
+  - saludo
+  - despedida
+
+  - preguntar_fotomulta
+  - plazo_fotomulta
+  - descuentos_fotomulta
+  - impugnar_fotomulta
+  - costos_fotomulta
+
+  # Intents futuros
+  - consultar_notificacion
+  - consultar_propietario_conductor
+  - consultar_suspension_licencia
+  - consultar_estado_fotomulta
+  - consultar_proceso_cobro
+  - consultar_curso_pedagogico
+  - consultar_validez_fotomulta
+  - consultar_tiempos_proceso
+  - consultar_prescripcion
+  - consultar_documentos_requeridos
+  - consultar_compra_venta
+  - consultar_inmovilizacion
+
+entities:
+  - placa
+  - cedula
+
+slots:
+  placa:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: placa
+
+  cedula:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: cedula
+
+  tiene_multas:
+    type: bool
+    mappings:
+      - type: custom
+
+  monto_total:
+    type: float
+    mappings:
+      - type: custom
+
+actions:
+  - action_default_fallback
+  - action_consultar_con_openrouter
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

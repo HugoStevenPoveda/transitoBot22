@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.claude/
+
+# Git
+.git/
+.gitignore
+*.md
+README.md
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+tests/
+
+# Logs
+*.log
+logs/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# RASA specific
+.rasa/
+results/
+
+# Models - will be generated during build or mounted as volume
+# Uncomment if you want to include pre-trained models in the image
+# models/*.tar.gz
+
+# Training data backups
+data/backup/

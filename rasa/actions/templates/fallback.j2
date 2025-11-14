@@ -1,0 +1,15 @@
+{% include 'base_cot.j2' %}
+
+**SITUACIÓN:** Intención no clara. Pregunta: "{{ user_question }}"
+
+**INTENCIONES DISPONIBLES (muestra):**
+{% for categoria, intents_list in categorized_intents.items() %}
+- {{ categoria }}: {% for intent in intents_list[:3] %}{{ intent.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endfor %}
+
+**TAREA:**
+1. Intenta clasificar la pregunta en una intención arriba
+2. Si logras clasificar (>70% seguro) → Responde directamente sobre ese tema
+3. Si NO puedes clasificar → Ofrece 2-3 opciones: "¿Te refieres a [opción1], [opción2] o [opción3]?"
+4. Responde CONCISO (2-3 párrafos máximo)
+5. Se directo y útil

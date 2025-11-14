@@ -1,0 +1,42 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+yarn.lock
+
+# Build outputs
+dist
+build
+.vite
+
+# Development files
+.git
+.gitignore
+*.md
+README.md
+PERSONALIZACION.md
+CASO_ESTUDIO_SOACHA.md
+
+# Environment files (will be managed separately)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage
+.nyc_output
+
+# Logs
+logs
+*.log

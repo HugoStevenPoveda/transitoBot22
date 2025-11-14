@@ -1,0 +1,63 @@
+recipe: default.v1
+assistant_id: 20251002-134825-basic-chateau
+
+language: es
+
+pipeline:
+  # Carga el modelo de spaCy (es_core_news_lg)
+  - name: SpacyNLP
+    model: es_core_news_lg
+
+  # Usa el tokenizador de spaCy (más preciso en español)
+  - name: SpacyTokenizer
+
+  # Extrae embeddings semánticos (captura sinónimos y contexto)
+  - name: SpacyFeaturizer
+    pooling: mean
+
+  # Reglas y patrones
+  - name: RegexFeaturizer
+  - name: LexicalSyntacticFeaturizer
+
+  # Vectorización adicional para palabras y caracteres (refuerza el aprendizaje)
+  - name: CountVectorsFeaturizer
+    analyzer: word
+    min_ngram: 1
+    max_ngram: 2
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 3
+    max_ngram: 5
+
+  # Clasificador multitarea (intents y entidades)
+  - name: DIETClassifier
+    epochs: 100
+    constrain_similarities: true
+    entity_recognition: true
+    intent_classification: true
+
+  # Mapeo de sinónimos
+  - name: EntitySynonymMapper
+
+  # Selector de respuestas tipo FAQ o retrieval
+  - name: ResponseSelector
+    epochs: 100
+    constrain_similarities: true
+
+  # Clasificador de fallback
+  - name: FallbackClassifier
+    threshold: 0.6
+    ambiguity_threshold: 0.15
+
+policies:
+  - name: MemoizationPolicy
+  - name: RulePolicy
+    core_fallback_threshold: 0.6
+    core_fallback_action_name: "action_default_fallback"
+  - name: UnexpecTEDIntentPolicy
+    max_history: 5
+    epochs: 100
+  - name: TEDPolicy
+    max_history: 5
+    epochs: 100
+    constrain_similarities: true

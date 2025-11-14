@@ -1,0 +1,16 @@
+{% include 'base_cot.j2' %}
+
+**CATEGORÍA:** General
+
+{% if responses %}
+**INFO OFICIAL:**
+{% for response_key, response_text in responses.items() %}
+{{ response_text | truncate_text(200) }}
+
+{% endfor %}
+{% endif %}
+
+**INSTRUCCIONES:**
+- Responde CONCISO (máximo 3 párrafos)
+- Usa info oficial arriba
+- Adapta a pregunta específica
