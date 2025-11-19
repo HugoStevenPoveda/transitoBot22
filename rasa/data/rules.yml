@@ -112,15 +112,15 @@ rules:
 
 - rule: Activar form de reporte de incidente
   steps:
-  - intent: reportar_incidente
-  - action: reportar_incidente_form
-  - active_loop: reportar_incidente_form
+  - intent: consultar_fotomulta
+  - action: consultar_fotomulta_form
+  - active_loop: consultar_fotomulta_form
 
 - rule: Submit form de reporte de incidente
   condition:
-  - active_loop: reportar_incidente_form
+  - active_loop: consultar_fotomulta_form
   steps:
-  - action: reportar_incidente_form
+  - action: consultar_fotomulta_form
   - active_loop: null
   - slot_was_set:
     - requested_slot: null

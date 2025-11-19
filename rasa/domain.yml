@@ -25,7 +25,7 @@ intents:
   - consultar_inmovilizacion
 
   # Intent para reporte de incidente con form
-  - reportar_incidente
+  - consultar_fotomulta
 
 entities:
   - placa
@@ -66,7 +66,7 @@ slots:
         entity: nombre
       - type: from_text
         conditions:
-          - active_loop: reportar_incidente_form
+          - active_loop: consultar_fotomulta_form
             requested_slot: nombre
 
   email:
@@ -77,7 +77,7 @@ slots:
         entity: email
       - type: from_text
         conditions:
-          - active_loop: reportar_incidente_form
+          - active_loop: consultar_fotomulta_form
             requested_slot: email
 
   lugar_hechos:
@@ -88,7 +88,7 @@ slots:
         entity: lugar_hechos
       - type: from_text
         conditions:
-          - active_loop: reportar_incidente_form
+          - active_loop: consultar_fotomulta_form
             requested_slot: lugar_hechos
 
   tipo_vehiculo:
@@ -99,7 +99,7 @@ slots:
         entity: tipo_vehiculo
       - type: from_text
         conditions:
-          - active_loop: reportar_incidente_form
+          - active_loop: consultar_fotomulta_form
             requested_slot: tipo_vehiculo
 
 actions:
@@ -107,7 +107,7 @@ actions:
   - action_consultar_con_openrouter
 
 forms:
-  reportar_incidente_form:
+  consultar_fotomulta_form:
     required_slots:
       - nombre
       - email

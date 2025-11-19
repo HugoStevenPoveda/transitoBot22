@@ -343,27 +343,20 @@ nlu:
       - ¿Qué casos aplican inmovilización?
       - ¿Esto procede para cámaras?
 
-  - intent: reportar_incidente
+  - intent: consultar_fotomulta
     examples: |
-      - quiero reportar un incidente
-      - necesito reportar algo
-      - tengo que registrar un incidente
-      - quiero hacer un reporte
-      - necesito registrar información
-      - quiero reportar
-      - necesito hacer un reporte de incidente
-      - debo reportar un caso
-      - tengo un caso que reportar
-      - necesito registrar datos
-      - mi nombre es [Juan Pérez](nombre) y necesito ayuda
-      - soy [María González](nombre), mi email es [maria@email.com](email)
-      - mi nombre es [Carlos](nombre) y fue en la [Calle 123 con Carrera 45](lugar_hechos)
-      - soy [Ana](nombre), tengo un [carro](tipo_vehiculo)
-      - fue en la [Avenida 68](lugar_hechos) y tengo una [moto](tipo_vehiculo)
+      - tengo una fotomulta, ¿qué hago?
+      - me llegó un comparendo electrónico, ¿es válido?
+      - ¿cómo puedo saber si tengo multas?
+      - quiero consultar el estado de una fotomulta
+      - necesito información sobre un comparendo
+      - ¿es legal la fotomulta que recibí?
+      - me llegó un comparendo por [exceso de velocidad](tipo_infraccion), ¿qué puedo hacer?
+      - ¿cómo puedo impugnar una fotomulta por [mal estacionamiento](tipo_infraccion)?
+      - necesito saber sobre una infracción en la [Carrera 7 con Calle 100](lugar_hechos)
+      - ¿dónde fue la fotomulta?
+      - la infracción fue en [Avenida 68](lugar_hechos)
+      - tengo una fotomulta de [esta mañana](fecha_multa)
       - mi correo es [juan.perez@gmail.com](email)
-      - ocurrió en [Carrera 7 con Calle 100](lugar_hechos)
-      - tengo un [carro](tipo_vehiculo)
-      - conduzco una [moto](tipo_vehiculo)
-      - tengo una [camioneta](tipo_vehiculo)
-      - mi vehículo es un [automóvil](tipo_vehiculo)
-      - manejo una [bicicleta](tipo_vehiculo)
+      - mi vehículo es una [moto](tipo_vehiculo)
+      - la fotomulta es por [estacionamiento prohibido](tipo_infraccion)
