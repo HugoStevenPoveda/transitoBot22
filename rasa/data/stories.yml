@@ -1,0 +1,50 @@
+version: "3.1"
+
+stories:
+
+# -----------------------
+# Historia básica: Saludo → Reporte → Despedida
+# -----------------------
+
+- story: Usuario reporta incidente completo
+  steps:
+  - intent: saludo
+  - action: utter_saludo
+  - intent: reportar_incidente
+  - action: reportar_incidente_form
+  - active_loop: reportar_incidente_form
+  - active_loop: null
+  - action: utter_datos_recopilados
+  - intent: despedida
+  - action: utter_despedida
+
+# -----------------------
+# Historia con interrupción: Usuario hace pregunta durante el form
+# -----------------------
+
+- story: Usuario interrumpe form con pregunta sobre fotomultas
+  steps:
+  - intent: saludo
+  - action: utter_saludo
+  - intent: reportar_incidente
+  - action: reportar_incidente_form
+  - active_loop: reportar_incidente_form
+  - intent: plazo_fotomulta
+  - action: utter_plazo_fotomulta
+  - action: reportar_incidente_form
+  - active_loop: null
+  - action: utter_datos_recopilados
+  - intent: despedida
+  - action: utter_despedida
+
+# -----------------------
+# Historia: Usuario va directo a reportar sin saludar
+# -----------------------
+
+- story: Usuario reporta directamente
+  steps:
+  - intent: reportar_incidente
+  - action: reportar_incidente_form
+  - active_loop: reportar_incidente_form
+  - active_loop: null
+  - action: utter_datos_recopilados

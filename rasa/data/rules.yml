@@ -1,0 +1,127 @@
+version: "3.1"
+rules:
+
+# -----------------------
+# Rules para Interacciones Básicas (Saludo/Despedida)
+# -----------------------
+
+- rule: Responder a saludo
+  steps:
+  - intent: saludo
+  - action: utter_saludo
+
+- rule: Responder a despedida
+  steps:
+  - intent: despedida
+  - action: utter_despedida
+
+
+# -----------------------
+# Rules para Consultas de Fotomultas (Usando Utterances Directas)
+# -----------------------
+
+- rule: Responder a preguntar_fotomulta
+  steps:
+  - intent: preguntar_fotomulta
+  - action: utter_preguntar_fotomulta
+
+- rule: Responder a plazo_fotomulta
+  steps:
+  - intent: plazo_fotomulta
+  - action: utter_plazo_fotomulta
+
+- rule: Responder a descuentos_fotomulta
+  steps:
+  - intent: descuentos_fotomulta
+  - action: utter_descuentos_fotomulta
+
+- rule: Responder a impugnar_fotomulta
+  steps:
+  - intent: impugnar_fotomulta
+  - action: utter_impugnar_fotomulta
+
+- rule: Responder a costos_fotomulta
+  steps:
+  - intent: costos_fotomulta
+  - action: utter_costos_fotomulta
+
+- rule: Responder a consultar_notificacion
+  steps:
+  - intent: consultar_notificacion
+  - action: utter_consultar_notificacion
+
+- rule: Responder a consultar_propietario_conductor
+  steps:
+  - intent: consultar_propietario_conductor
+  - action: utter_consultar_propietario_conductor
+
+- rule: Responder a consultar_suspension_licencia
+  steps:
+  - intent: consultar_suspension_licencia
+  - action: utter_consultar_suspension_licencia
+
+- rule: Responder a consultar_estado_fotomulta
+  steps:
+  - intent: consultar_estado_fotomulta
+  - action: utter_consultar_estado_fotomulta
+
+- rule: Responder a consultar_proceso_cobro
+  steps:
+  - intent: consultar_proceso_cobro
+  - action: utter_consultar_proceso_cobro
+
+- rule: Responder a consultar_curso_pedagogico
+  steps:
+  - intent: consultar_curso_pedagogico
+  - action: utter_consultar_curso_pedagogico
+
+- rule: Responder a consultar_validez_fotomulta
+  steps:
+  - intent: consultar_validez_fotomulta
+  - action: utter_consultar_validez_fotomulta
+
+- rule: Responder a consultar_tiempos_proceso
+  steps:
+  - intent: consultar_tiempos_proceso
+  - action: utter_consultar_tiempos_proceso
+
+- rule: Responder a consultar_prescripcion
+  steps:
+  - intent: consultar_prescripcion
+  - action: utter_consultar_prescripcion
+
+- rule: Responder a consultar_documentos_requeridos
+  steps:
+  - intent: consultar_documentos_requeridos
+  - action: utter_consultar_documentos_requeridos
+
+- rule: Responder a consultar_compra_venta
+  steps:
+  - intent: consultar_compra_venta
+  - action: utter_consultar_compra_venta
+
+- rule: Responder a consultar_inmovilizacion
+  steps:
+  - intent: consultar_inmovilizacion
+  - action: utter_consultar_inmovilizacion
+
+
+# -----------------------
+# Rules para Form de Reporte de Incidente
+# -----------------------
+
+- rule: Activar form de reporte de incidente
+  steps:
+  - intent: reportar_incidente
+  - action: reportar_incidente_form
+  - active_loop: reportar_incidente_form
+
+- rule: Submit form de reporte de incidente
+  condition:
+  - active_loop: reportar_incidente_form
+  steps:
+  - action: reportar_incidente_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_datos_recopilados

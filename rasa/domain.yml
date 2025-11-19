@@ -24,9 +24,16 @@ intents:
   - consultar_compra_venta
   - consultar_inmovilizacion
 
+  # Intent para reporte de incidente con form
+  - reportar_incidente
+
 entities:
   - placa
   - cedula
+  - nombre
+  - email
+  - lugar_hechos
+  - tipo_vehiculo
 
 slots:
   placa:
@@ -51,9 +58,61 @@ slots:
     mappings:
       - type: custom
 
+  nombre:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: nombre
+      - type: from_text
+        conditions:
+          - active_loop: reportar_incidente_form
+            requested_slot: nombre
+
+  email:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: email
+      - type: from_text
+        conditions:
+          - active_loop: reportar_incidente_form
+            requested_slot: email
+
+  lugar_hechos:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: lugar_hechos
+      - type: from_text
+        conditions:
+          - active_loop: reportar_incidente_form
+            requested_slot: lugar_hechos
+
+  tipo_vehiculo:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: tipo_vehiculo
+      - type: from_text
+        conditions:
+          - active_loop: reportar_incidente_form
+            requested_slot: tipo_vehiculo
+
 actions:
   - action_default_fallback
   - action_consultar_con_openrouter
+
+forms:
+  reportar_incidente_form:
+    required_slots:
+      - nombre
+      - email
+      - lugar_hechos
+      - tipo_vehiculo
 
 session_config:
   session_expiration_time: 60

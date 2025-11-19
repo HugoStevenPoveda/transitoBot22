@@ -60,3 +60,18 @@ responses:
 
   utter_consultar_inmovilizacion:
   - text: "Las fotomultas no generan inmovilización del vehículo; solo comparendos presenciales pueden hacerlo."
+
+  utter_ask_nombre:
+  - text: "¿Cuál es tu nombre completo?"
+
+  utter_ask_email:
+  - text: "¿Cuál es tu correo electrónico?"
+
+  utter_ask_lugar_hechos:
+  - text: "¿En qué lugar ocurrieron los hechos? (Calle, dirección o ubicación)"
+
+  utter_ask_tipo_vehiculo:
+  - text: "¿Qué tipo de vehículo tienes? (carro, moto, bicicleta, camioneta, etc.)"
+
+  utter_datos_recopilados:
+  - text: "Perfecto {nombre}, he registrado tu información:\n\n📧 Email: {email}\n📍 Lugar: {lugar_hechos}\n🚗 Vehículo: {tipo_vehiculo}\n\n¿En qué más puedo ayudarte?"
