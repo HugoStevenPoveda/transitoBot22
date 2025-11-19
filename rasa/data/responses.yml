@@ -1,0 +1,62 @@
+version: "3.1"
+responses:
+  utter_saludo:
+    - text: "¡Hola! ¿En qué puedo ayudarte hoy?"
+    - text: "Hola, ¿cómo estás? ¿Qué puedo hacer por ti?"
+    - text: "¡Buen día! ¿En qué te puedo apoyar?"
+    - text: "Hola, un gusto saludarte. ¿Cómo puedo ayudarte?"
+  utter_despedida:
+      - text: "¡Hasta luego! Cuídate mucho."
+      - text: "Chao, que estés muy bien."
+      - text: "Nos vemos pronto, ¡que tengas un buen día!"
+      - text: "Gracias por pasarte por aquí. ¡Hasta la próxima!"
+  utter_preguntar_fotomulta:
+  - text: "Puedes consultar tus fotomultas en el SIMIT o en la Secretaría de Tránsito de tu ciudad usando tu cédula o placa."
+
+  utter_plazo_fotomulta:
+  - text: "El plazo general para pagar una fotomulta es de 5 a 15 días hábiles para aprovechar descuentos, y 30 días calendario para evitar mora."
+
+  utter_descuentos_fotomulta:
+  - text: "Las fotomultas permiten descuentos del 50% y 25% si realizas el curso pedagógico dentro de los plazos establecidos."
+
+  utter_impugnar_fotomulta:
+  - text: "Puedes impugnar una fotomulta solicitando una audiencia ante la Secretaría de Tránsito y presentando tus pruebas."
+
+  utter_costos_fotomulta:
+  - text: "El valor de una fotomulta depende del tipo de infracción y se calcula en salarios mínimos. Puedes consultarlo en el SIMIT."
+
+  utter_consultar_notificacion:
+  - text: "La notificación de una fotomulta llega por correo físico, correo electrónico o publicación en plataforma oficial."
+
+  utter_consultar_propietario_conductor:
+  - text: "Legalmente el propietario es responsable, pero puede demostrar que no conducía para trasladar la responsabilidad."
+
+  utter_consultar_suspension_licencia:
+  - text: "Las fotomultas no generan suspensión de licencia ni pérdida de puntos, ya que no identifican al conductor."
+
+  utter_consultar_estado_fotomulta:
+  - text: "Puedes consultar el estado de tus fotomultas en el SIMIT o en la Secretaría de Tránsito usando tu placa o cédula."
+
+  utter_consultar_proceso_cobro:
+  - text: "Si no pagas una fotomulta, puede pasar a cobro coactivo, generar intereses y eventualmente embargo."
+
+  utter_consultar_curso_pedagogico:
+  - text: "El curso pedagógico aplica para obtener descuentos del 50% o 25% en fotomultas, según el tiempo de pago."
+
+  utter_consultar_validez_fotomulta:
+  - text: "Una fotomulta válida debe cumplir requisitos como cámara certificada, señalización visible y notificación dentro del plazo."
+
+  utter_consultar_tiempos_proceso:
+  - text: "Una fotomulta suele aparecer en el sistema entre 1 y 15 días y la notificación debe hacerse dentro de 10 días hábiles."
+
+  utter_consultar_prescripcion:
+  - text: "Las fotomultas prescriben a los 3 años si la autoridad no inicia cobro, o a los 5 años si no completa el proceso."
+
+  utter_consultar_documentos_requeridos:
+  - text: "Para impugnar necesitas cédula, pruebas del caso, documentos del vehículo y cualquier evidencia que sustente tu defensa."
+
+  utter_consultar_compra_venta:
+  - text: "Las fotomultas anteriores a la compra deben ser pagadas por el antiguo dueño, pero siempre revisa el historial antes de comprar."
+
+  utter_consultar_inmovilizacion:
+  - text: "Las fotomultas no generan inmovilización del vehículo; solo comparendos presenciales pueden hacerlo."
