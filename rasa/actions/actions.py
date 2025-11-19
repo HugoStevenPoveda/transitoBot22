@@ -350,3 +350,115 @@ class ActionDefaultFallback(Action):
             return ""
 
         return "\n".join(mensajes)
+
+
+class ActionProcesarInfraccion(Action):
+    """
+    Procesa la descripción de la infracción del usuario.
+    Extrae la entidad tipo_infraccion y dispara la pregunta sobre qué acción tomar.
+    """
+
+    def name(self) -> Text:
+        return "action_procesar_infraccion"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        # Extraer entidad tipo_infraccion
+        entidades = tracker.latest_message.get('entities', [])
+        tipo_infraccion = None
+
+        for entidad in entidades:
+            if entidad.get('entity') == 'tipo_infraccion':
+                tipo_infraccion = entidad.get('value')
+                break
+
+        # Si no se detectó la entidad, usar el texto completo
+        if not tipo_infraccion:
+            tipo_infraccion = tracker.latest_message.get('text', 'la infracción')
+
+        print(f"[Procesar Infracción] Tipo detectado: {tipo_infraccion}")
+
+        # Disparar la pregunta sobre qué acción tomar
+        dispatcher.utter_message(response="utter_preguntar_accion")
+
+        # Retornar el slot actualizado
+        return [SlotSet("tipo_infraccion", tipo_infraccion)]
+
+
+class ActionProcesarEleccion(Action):
+    """
+    Procesa la elección del usuario (pagar, curso o impugnar).
+    Guarda la acción elegida y pregunta si desea recibir info por correo.
+    """
+
+    def name(self) -> Text:
+        return "action_procesar_eleccion"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        # Obtener el intent del usuario
+        intent = tracker.latest_message.get('intent', {}).get('name')
+
+        # Mapear intent a acción elegida
+        accion_map = {
+            'elegir_pagar': 'pagar',
+            'elegir_curso': 'curso',
+            'elegir_impugnar': 'impugnar'
+        }
+
+        accion_elegida = accion_map.get(intent, 'pagar')
+
+        print(f"[Procesar Elección] Intent: {intent}, Acción: {accion_elegida}")
+
+        # Disparar pregunta sobre envío de correo
+        dispatcher.utter_message(response="utter_preguntar_envio_correo")
+
+        # Retornar el slot actualizado
+        return [SlotSet("accion_elegida", accion_elegida)]
+
+
+class ActionEnviarInformacion(Action):
+    """
+    Procesa la respuesta sobre envío de correo.
+    Dispara la confirmación correspondiente según la acción elegida.
+    """
+
+    def name(self) -> Text:
+        return "action_enviar_informacion"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        # Obtener intent (afirmar o negar)
+        intent = tracker.latest_message.get('intent', {}).get('name')
+
+        # Obtener acción elegida del slot
+        accion_elegida = tracker.get_slot('accion_elegida')
+
+        enviar_correo = (intent == 'afirmar')
+
+        print(f"[Enviar Información] Acción: {accion_elegida}, Enviar correo: {enviar_correo}")
+
+        # Si el usuario dijo que SÍ quiere recibir el correo
+        if enviar_correo:
+            # Disparar confirmación según la acción elegida
+            if accion_elegida == 'pagar':
+                dispatcher.utter_message(response="utter_confirmar_pago")
+            elif accion_elegida == 'curso':
+                dispatcher.utter_message(response="utter_confirmar_curso")
+            elif accion_elegida == 'impugnar':
+                dispatcher.utter_message(response="utter_confirmar_impugnacion")
+            else:
+                # Fallback
+                dispatcher.utter_message(response="utter_confirmacion_final")
+        else:
+            # Si dijo NO
+            dispatcher.utter_message(response="utter_no_enviar_correo")
+
+        # Retornar el slot actualizado
+        return [SlotSet("enviar_correo", enviar_correo)]

@@ -3,10 +3,10 @@ version: "3.1"
 stories:
 
 # -----------------------
-# Historia básica: Saludo → Reporte → Despedida
+# Historia 1: Flujo completo - Usuario quiere impugnar
 # -----------------------
 
-- story: Usuario reporta incidente completo
+- story: Usuario completa form y decide impugnar
   steps:
   - intent: saludo
   - action: utter_saludo
@@ -15,11 +15,113 @@ stories:
   - active_loop: consultar_fotomulta_form
   - active_loop: null
   - action: utter_datos_recopilados
+  - intent: describir_infraccion
+  - action: action_procesar_infraccion
+  - intent: elegir_impugnar
+  - action: action_procesar_eleccion
+  - intent: afirmar
+  - action: action_enviar_informacion
   - intent: despedida
   - action: utter_despedida
 
 # -----------------------
-# Historia con interrupción: Usuario hace pregunta durante el form
+# Historia 2: Usuario quiere pagar
+# -----------------------
+
+- story: Usuario completa form y decide pagar
+  steps:
+  - intent: consultar_fotomulta
+  - action: consultar_fotomulta_form
+  - active_loop: consultar_fotomulta_form
+  - active_loop: null
+  - action: utter_datos_recopilados
+  - intent: describir_infraccion
+  - action: action_procesar_infraccion
+  - intent: elegir_pagar
+  - action: action_procesar_eleccion
+  - intent: afirmar
+  - action: action_enviar_informacion
+
+# -----------------------
+# Historia 3: Usuario quiere hacer curso
+# -----------------------
+
+- story: Usuario completa form y decide hacer curso
+  steps:
+  - intent: consultar_fotomulta
+  - action: consultar_fotomulta_form
+  - active_loop: consultar_fotomulta_form
+  - active_loop: null
+  - action: utter_datos_recopilados
+  - intent: describir_infraccion
+  - action: action_procesar_infraccion
+  - intent: elegir_curso
+  - action: action_procesar_eleccion
+  - intent: afirmar
+  - action: action_enviar_informacion
+
+# -----------------------
+# Historia 4: Usuario NO quiere recibir info por correo
+# -----------------------
+
+- story: Usuario no desea recibir correo
+  steps:
+  - intent: consultar_fotomulta
+  - action: consultar_fotomulta_form
+  - active_loop: consultar_fotomulta_form
+  - active_loop: null
+  - action: utter_datos_recopilados
+  - intent: describir_infraccion
+  - action: action_procesar_infraccion
+  - intent: elegir_pagar
+  - action: action_procesar_eleccion
+  - intent: negar
+  - action: action_enviar_informacion
+
+# -----------------------
+# Historia 5: Usuario interrumpe con pregunta durante el flujo
+# -----------------------
+
+- story: Usuario pregunta durante el flujo post-form
+  steps:
+  - intent: consultar_fotomulta
+  - action: consultar_fotomulta_form
+  - active_loop: consultar_fotomulta_form
+  - active_loop: null
+  - action: utter_datos_recopilados
+  - intent: describir_infraccion
+  - action: action_procesar_infraccion
+  - intent: plazo_fotomulta
+  - action: utter_plazo_fotomulta
+  - intent: elegir_pagar
+  - action: action_procesar_eleccion
+  - intent: afirmar
+  - action: action_enviar_informacion
+
+# -----------------------
+# Historia 6: Usuario hace consultas antes del form
+# -----------------------
+
+- story: Usuario pregunta antes de activar form
+  steps:
+  - intent: saludo
+  - action: utter_saludo
+  - intent: plazo_fotomulta
+  - action: utter_plazo_fotomulta
+  - intent: consultar_fotomulta
+  - action: consultar_fotomulta_form
+  - active_loop: consultar_fotomulta_form
+  - active_loop: null
+  - action: utter_datos_recopilados
+  - intent: describir_infraccion
+  - action: action_procesar_infraccion
+  - intent: elegir_impugnar
+  - action: action_procesar_eleccion
+  - intent: afirmar
+  - action: action_enviar_informacion
+
+# -----------------------
+# Historia 7: Usuario interrumpe form con pregunta
 # -----------------------
 
 - story: Usuario interrumpe form con pregunta sobre fotomultas
@@ -34,11 +136,17 @@ stories:
   - action: consultar_fotomulta_form
   - active_loop: null
   - action: utter_datos_recopilados
+  - intent: describir_infraccion
+  - action: action_procesar_infraccion
+  - intent: elegir_curso
+  - action: action_procesar_eleccion
+  - intent: afirmar
+  - action: action_enviar_informacion
   - intent: despedida
   - action: utter_despedida
 
 # -----------------------
-# Historia: Usuario va directo a reportar sin saludar
+# Historia 8: Usuario va directo a reportar sin saludar
 # -----------------------
 
 - story: Usuario reporta directamente
@@ -48,3 +156,9 @@ stories:
   - active_loop: consultar_fotomulta_form
   - active_loop: null
   - action: utter_datos_recopilados
+  - intent: describir_infraccion
+  - action: action_procesar_infraccion
+  - intent: elegir_impugnar
+  - action: action_procesar_eleccion
+  - intent: afirmar
+  - action: action_enviar_informacion

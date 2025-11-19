@@ -26,6 +26,12 @@ intents:
 
   # Intent para reporte de incidente con form
   - consultar_fotomulta
+  - describir_infraccion
+  - afirmar
+  - negar
+  - elegir_pagar
+  - elegir_curso
+  - elegir_impugnar
 
 entities:
   - placa
@@ -34,6 +40,7 @@ entities:
   - email
   - lugar_hechos
   - tipo_vehiculo
+  - tipo_infraccion
 
 slots:
   placa:
@@ -102,9 +109,31 @@ slots:
           - active_loop: consultar_fotomulta_form
             requested_slot: tipo_vehiculo
 
+  tipo_infraccion:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: tipo_infraccion
+
+  accion_elegida:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  enviar_correo:
+    type: bool
+    influence_conversation: false
+    mappings:
+      - type: custom
+
 actions:
   - action_default_fallback
   - action_consultar_con_openrouter
+  - action_procesar_infraccion
+  - action_procesar_eleccion
+  - action_enviar_informacion
 
 forms:
   consultar_fotomulta_form:

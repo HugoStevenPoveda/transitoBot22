@@ -74,4 +74,25 @@ responses:
   - text: "¿Qué tipo de vehículo tienes? (carro, moto, bicicleta, camioneta, etc.)"
 
   utter_datos_recopilados:
-  - text: "Perfecto {nombre}, he registrado tu información:\n\n📧 Email: {email}\n📍 Lugar: {lugar_hechos}\n🚗 Vehículo: {tipo_vehiculo}\n\n¿Cuéntame qué pasó.?"
+  - text: "Perfecto {nombre}, he registrado tu información:\n\n📧 Email: {email}\n📍 Lugar: {lugar_hechos}\n🚗 Vehículo: {tipo_vehiculo}\n\n¿Cuéntame qué pasó?"
+
+  utter_preguntar_accion:
+  - text: "Entiendo, fue por {tipo_infraccion}. ¿Qué piensas hacer?\n\n1️⃣ Pagar la multa\n2️⃣ Hacer el curso pedagógico\n3️⃣ Impugnar la fotomulta\n\nEscribe tu opción."
+
+  utter_preguntar_envio_correo:
+  - text: "¿Deseas recibir la información por correo electrónico?"
+
+  utter_confirmar_pago:
+  - text: "Perfecto {nombre}, te ayudaré con el proceso de pago.\n\n📧 Te enviaré los detalles del pago a {email}.\n\n¿En qué más puedo ayudarte?"
+
+  utter_confirmar_curso:
+  - text: "Excelente {nombre}, el curso pedagógico te permitirá obtener descuentos.\n\n📧 Te enviaré información sobre cómo inscribirte al curso a {email}.\n\n¿Necesitas algo más?"
+
+  utter_confirmar_impugnacion:
+  - text: "Entendido {nombre}, te apoyaré en el proceso de impugnación.\n\n📧 Te enviaré toda la información necesaria para impugnar tu fotomulta a {email}.\n\n¿En qué más puedo ayudarte?"
+
+  utter_confirmacion_final:
+  - text: "He enviado toda la información a {email}. Revisa tu correo. ¿Necesitas algo más?"
+
+  utter_no_enviar_correo:
+  - text: "Entendido. La información queda registrada en el sistema. ¿En qué más puedo ayudarte?"

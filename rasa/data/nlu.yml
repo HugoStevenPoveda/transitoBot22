@@ -360,3 +360,107 @@ nlu:
       - mi correo es [juan.perez@gmail.com](email)
       - mi vehículo es una [moto](tipo_vehiculo)
       - la fotomulta es por [estacionamiento prohibido](tipo_infraccion)
+
+  - intent: describir_infraccion
+    examples: |
+      - me multaron por [exceso de velocidad](tipo_infraccion)
+      - fue por [estacionamiento prohibido](tipo_infraccion)
+      - [pasar un semáforo en rojo](tipo_infraccion)
+      - [no respetar la señal de pare](tipo_infraccion)
+      - [circular por carril exclusivo](tipo_infraccion)
+      - [conducir hablando por celular](tipo_infraccion)
+      - [no usar cinturón de seguridad](tipo_infraccion)
+      - [adelantar en zona prohibida](tipo_infraccion)
+      - [parquear en zona prohibida](tipo_infraccion)
+      - [transitar por carril de Transmilenio](tipo_infraccion)
+      - [girar en U donde no está permitido](tipo_infraccion)
+      - [no respetar paso peatonal](tipo_infraccion)
+      - fue por [mal estacionamiento](tipo_infraccion)
+      - me acusaron de [conducir en estado de embriaguez](tipo_infraccion)
+      - dicen que cometí [invasión de carril](tipo_infraccion)
+
+  - intent: afirmar
+    examples: |
+      - sí
+      - si
+      - claro
+      - por supuesto
+      - sí, por favor
+      - si por favor
+      - claro que sí
+      - afirmativo
+      - correcto
+      - exacto
+      - ok
+      - dale
+      - perfecto
+      - de acuerdo
+      - está bien
+
+  - intent: negar
+    examples: |
+      - no
+      - no gracias
+      - no, gracias
+      - mejor no
+      - no deseo
+      - no quiero
+      - negativo
+      - no me interesa
+      - ahora no
+      - tal vez después
+      - no por ahora
+      - no necesito
+      - prefiero no
+      - no es necesario
+
+  - intent: elegir_pagar
+    examples: |
+      - quiero pagar
+      - voy a pagar la multa
+      - prefiero pagar
+      - pagar
+      - opción 1
+      - la opción de pagar
+      - me interesa pagar
+      - quisiera pagar
+      - necesito pagar
+      - voy con la opción de pago
+      - elijo pagar
+      - mejor pago
+      - pagaré la multa
+      - quiero hacer el pago
+
+  - intent: elegir_curso
+    examples: |
+      - quiero hacer el curso
+      - voy a tomar el curso pedagógico
+      - el curso
+      - opción 2
+      - prefiero el curso
+      - me interesa el curso
+      - quisiera hacer el curso
+      - elijo el curso
+      - curso pedagógico
+      - hacer el curso
+      - tomar el curso
+      - inscribirme al curso
+      - el curso de tránsito
+      - quiero el curso
+
+  - intent: elegir_impugnar
+    examples: |
+      - quiero impugnar
+      - voy a impugnar
+      - prefiero impugnar
+      - impugnar
+      - opción 3
+      - la opción de impugnar
+      - me interesa impugnar
+      - quisiera impugnar
+      - necesito impugnar
+      - elijo impugnar
+      - quiero controvertir
+      - voy a apelar
+      - apelar la fotomulta
+      - controvertir el comparendo
