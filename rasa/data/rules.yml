@@ -125,3 +125,38 @@ rules:
   - slot_was_set:
     - requested_slot: null
   - action: utter_datos_recopilados
+
+
+# -----------------------
+# Rules para Flujo Post-Form (Después de completar el form)
+# -----------------------
+
+- rule: Procesar descripción de infracción
+  steps:
+  - intent: describir_infraccion
+  - action: action_procesar_infraccion
+
+- rule: Procesar elección de pagar
+  steps:
+  - intent: elegir_pagar
+  - action: action_procesar_eleccion
+
+- rule: Procesar elección de curso
+  steps:
+  - intent: elegir_curso
+  - action: action_procesar_eleccion
+
+- rule: Procesar elección de impugnar
+  steps:
+  - intent: elegir_impugnar
+  - action: action_procesar_eleccion
+
+- rule: Enviar información cuando usuario afirma
+  steps:
+  - intent: afirmar
+  - action: action_enviar_informacion
+
+- rule: No enviar información cuando usuario niega
+  steps:
+  - intent: negar
+  - action: action_enviar_informacion
