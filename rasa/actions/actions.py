@@ -30,6 +30,7 @@ from utils import (
 
 # URL base de la API de multas (cambiar por tu API real)
 API_BASE_URL = "http://backrag:8000/api"
+#API_BASE_URL = "http://localhost:8000/api"
 
 # Umbral de confianza para considerar intención válida
 CONFIDENCE_THRESHOLD = 0.5
@@ -424,7 +425,9 @@ class ActionProcesarEleccion(Action):
 class ActionEnviarInformacion(Action):
     """
     Procesa la respuesta sobre envío de correo.
-    Dispara la confirmación correspondiente según la acción elegida.
+    Usa el LLM con tools (buscar_articulos_transito y enviar_email) para:
+    1. Buscar el artículo específico del código de tránsito violado
+    2. Enviar correo con información detallada según la acción elegida
     """
 
     def name(self) -> Text:
@@ -436,29 +439,292 @@ class ActionEnviarInformacion(Action):
 
         # Obtener intent (afirmar o negar)
         intent = tracker.latest_message.get('intent', {}).get('name')
-
-        # Obtener acción elegida del slot
-        accion_elegida = tracker.get_slot('accion_elegida')
-
         enviar_correo = (intent == 'afirmar')
 
-        print(f"[Enviar Información] Acción: {accion_elegida}, Enviar correo: {enviar_correo}")
-
-        # Si el usuario dijo que SÍ quiere recibir el correo
-        if enviar_correo:
-            # Disparar confirmación según la acción elegida
-            if accion_elegida == 'pagar':
-                dispatcher.utter_message(response="utter_confirmar_pago")
-            elif accion_elegida == 'curso':
-                dispatcher.utter_message(response="utter_confirmar_curso")
-            elif accion_elegida == 'impugnar':
-                dispatcher.utter_message(response="utter_confirmar_impugnacion")
-            else:
-                # Fallback
-                dispatcher.utter_message(response="utter_confirmacion_final")
-        else:
-            # Si dijo NO
+        # Si el usuario dijo NO
+        if not enviar_correo:
             dispatcher.utter_message(response="utter_no_enviar_correo")
+            return [SlotSet("enviar_correo", False)]
 
-        # Retornar el slot actualizado
-        return [SlotSet("enviar_correo", enviar_correo)]
+        # PASO 1: Obtener slots necesarios
+        accion_elegida = tracker.get_slot('accion_elegida')
+        tipo_infraccion = tracker.get_slot('tipo_infraccion')
+
+        # PASO 2: Validar y extraer tipo_infraccion
+        if not tipo_infraccion:
+            # Intentar extraer de entidades
+            entidades = tracker.latest_message.get('entities', [])
+            for entidad in entidades:
+                if entidad.get('entity') == 'tipo_infraccion':
+                    tipo_infraccion = entidad.get('value')
+                    break
+
+        # Si aún no hay tipo_infraccion, usar valor genérico
+        if not tipo_infraccion:
+            tipo_infraccion = "infracción de tránsito (tipo no especificado)"
+            print("⚠️ [ActionEnviarInformacion] No se encontró tipo_infraccion, usando valor genérico")
+
+        print(f"[ActionEnviarInformacion] Acción elegida: {accion_elegida}")
+        print(f"[ActionEnviarInformacion] Tipo infracción: {tipo_infraccion}")
+        print(f"[ActionEnviarInformacion] Enviar correo: {enviar_correo}")
+
+        # PASO 3: Extraer tracking de conversación
+        tracking_conversacion = self._extraer_tracking(tracker)
+
+        # Enriquecer el tracking con información de la infracción
+        contexto_adicional = f"""
+Usuario: [Infracción reportada: {tipo_infraccion}]
+Usuario: [Eligió acción: {accion_elegida}]
+Usuario: [Confirmó que SÍ quiere recibir información por correo]
+"""
+        tracking_conversacion += contexto_adicional
+
+        # PASO 4: Extraer entidades
+        entidades = tracker.latest_message.get('entities', [])
+
+        # PASO 5: Construir prompt del sistema según la acción elegida
+        context_system = self._construir_prompt_segun_accion(accion_elegida, tipo_infraccion)
+
+        # PASO 6: Construir payload completo
+        payload = {
+            "context": {
+                "system": context_system,
+                "user": tracking_conversacion
+            },
+            "pregunta": f"El usuario quiere información sobre {accion_elegida} para su infracción: {tipo_infraccion}. Busca el artículo violado y envía toda la información detallada por correo.",
+            "entidades": entidades,
+            "intencion": "enviar_informacion_por_correo",
+            "use_tools": True,
+            "available_tools": ["enviar_email", "buscar_articulos_transito"]
+        }
+
+        print(f"[ActionEnviarInformacion] Tools disponibles: {payload['available_tools']}")
+        print(f"[ActionEnviarInformacion] Pregunta construida: {payload['pregunta']}")
+        print(f"[ActionEnviarInformacion] Context system (preview): {context_system[:200]}...")
+
+        # PASO 7: Llamar al endpoint
+        try:
+            response = requests.post(
+                f"{API_BASE_URL}/v1/anthropic",
+                json=payload,
+                timeout=30
+            )
+
+            print(f"[ActionEnviarInformacion] Response status: {response.status_code}")
+
+            if response.status_code == 200:
+                data = response.json()
+                answer = data.get("answer", "")
+                model_used = data.get("model_used", "")
+                processing_time = data.get("processing_time", 0)
+
+                print(f"✅ [ActionEnviarInformacion] LLM ejecutó tools y respondió en {processing_time:.2f}s")
+                print(f"[ActionEnviarInformacion] Model usado: {model_used}")
+
+                # Enviar respuesta al usuario
+                dispatcher.utter_message(text=answer)
+
+            else:
+                print(f"⚠️ [ActionEnviarInformacion] Error HTTP {response.status_code}")
+                dispatcher.utter_message(
+                    text="Lo siento, no pude procesar el envío de información. Por favor, intenta de nuevo más tarde."
+                )
+
+        except requests.exceptions.RequestException as e:
+            print(f"❌ [ActionEnviarInformacion] Error de red: {e}")
+            dispatcher.utter_message(
+                text="⚠️ El servicio de envío de información no está disponible en este momento. Por favor, intenta más tarde."
+            )
+        except Exception as e:
+            print(f"❌ [ActionEnviarInformacion] Error inesperado: {e}")
+            dispatcher.utter_message(
+                text="Lo siento, ocurrió un error inesperado. Por favor, intenta de nuevo."
+            )
+
+        return [SlotSet("enviar_correo", True)]
+
+    def _extraer_tracking(self, tracker: Tracker) -> str:
+        """
+        Extrae el historial de conversación del tracker de Rasa.
+        Retorna un string con formato Usuario/Bot alternado.
+        """
+        mensajes = []
+
+        # Obtener últimos 20 eventos para no sobrecargar el contexto
+        eventos_recientes = tracker.events[-20:] if len(tracker.events) > 20 else tracker.events
+
+        for event in eventos_recientes:
+            event_type = event.get("event")
+
+            # Capturar mensajes del usuario
+            if event_type == "user":
+                texto = event.get("text", "")
+                if texto and texto.strip():
+                    mensajes.append(f"Usuario: {texto}")
+
+            # Capturar respuestas del bot
+            elif event_type == "bot":
+                texto = event.get("text", "")
+                if texto and texto.strip():
+                    mensajes.append(f"Bot: {texto}")
+
+        # Si no hay historial, retornar string vacío
+        if not mensajes:
+            return ""
+
+        return "\n".join(mensajes)
+
+    def _construir_prompt_segun_accion(self, accion_elegida: str, tipo_infraccion: str) -> str:
+        """
+        Construye el prompt del sistema según la acción elegida por el usuario.
+        Incluye instrucciones detalladas para usar las tools.
+        """
+
+        # Instrucciones comunes para todas las acciones
+        instrucciones_tools = f"""
+INSTRUCCIONES PARA USO DE HERRAMIENTAS:
+
+1. **PRIMERO** usa la herramienta `buscar_articulos_transito` para:
+   - Buscar el artículo específico del Código Nacional de Tránsito que se violó
+   - Usar el tipo de infracción: "{tipo_infraccion}"
+   - Obtener: número de artículo, descripción legal, sanciones y multas
+
+2. **SEGUNDO** usa la herramienta `enviar_email` para:
+   - Enviar al correo del usuario la información completa
+   - INCLUIR OBLIGATORIAMENTE en el correo:
+     * El artículo específico violado (del paso 1)
+     * La descripción legal de la infracción
+     * Las sanciones establecidas
+     * La información sobre {accion_elegida} (según el tipo de acción)
+"""
+
+        # Prompts específicos según la acción elegida
+        if accion_elegida == 'pagar':
+            return f"""
+Eres un asistente especializado en el Código Nacional de Tránsito de Colombia.
+
+CONTEXTO:
+- El usuario ha decidido PAGAR su infracción de tránsito
+- Tipo de infracción: {tipo_infraccion}
+
+{instrucciones_tools}
+
+3. Estructura del correo para PAGAR:
+   📋 Asunto: "Información para pago de tu infracción de tránsito"
+
+   📌 INFRACCIÓN IDENTIFICADA
+   - Artículo violado: [Resultado de buscar_articulos_transito]
+   - Descripción legal: [Descripción completa]
+   - Multa establecida: [Monto en SMLDV y pesos colombianos]
+
+   💳 INFORMACIÓN DE PAGO
+   - Pasos detallados para pagar
+   - Plataformas oficiales de pago disponibles
+   - Descuentos por pronto pago (si aplican)
+   - Enlaces a portales de pago oficiales
+
+   📅 PLAZOS IMPORTANTES
+   - Fecha límite para descuento del 50%
+   - Consecuencias de no pagar a tiempo
+
+TONO: FORMAL, CLARO, ORIENTADO A LA ACCIÓN
+"""
+
+        elif accion_elegida == 'curso':
+            return f"""
+Eres un asistente especializado en el Código Nacional de Tránsito de Colombia.
+
+CONTEXTO:
+- El usuario ha decidido tomar un CURSO PEDAGÓGICO como alternativa
+- Tipo de infracción: {tipo_infraccion}
+
+{instrucciones_tools}
+
+3. Estructura del correo para CURSO PEDAGÓGICO:
+   📋 Asunto: "Información sobre curso pedagógico para tu infracción"
+
+   📌 INFRACCIÓN IDENTIFICADA
+   - Artículo violado: [Resultado de buscar_articulos_transito]
+   - Descripción legal: [Descripción completa]
+
+   📚 INFORMACIÓN DEL CURSO PEDAGÓGICO
+   - Instituciones autorizadas para tomar el curso
+   - Duración del curso (horas)
+   - Costos aproximados
+   - Requisitos de inscripción
+   - Procedimiento para validar el curso ante autoridades
+   - Beneficios (descuento en multa, puntos en licencia)
+
+   ⚠️ CONDICIONES Y REQUISITOS
+   - Verificar si esta infracción permite curso pedagógico
+   - Plazos para tomar el curso
+   - Documentos a presentar
+
+TONO: INFORMATIVO, EDUCATIVO, MOTIVADOR
+"""
+
+        elif accion_elegida == 'impugnar':
+            return f"""
+Eres un asistente especializado en el Código Nacional de Tránsito de Colombia.
+
+CONTEXTO:
+- El usuario ha decidido IMPUGNAR su infracción de tránsito
+- Tipo de infracción: {tipo_infraccion}
+
+{instrucciones_tools}
+
+3. Estructura del correo para IMPUGNACIÓN:
+   📋 Asunto: "Información para impugnar tu infracción de tránsito"
+
+   📌 INFRACCIÓN IDENTIFICADA
+   - Artículo violado: [Resultado de buscar_articulos_transito]
+   - Descripción legal completa
+   - Elementos constitutivos que deben probarse
+
+   ⚖️ PROCESO DE IMPUGNACIÓN
+   - Documentos necesarios para impugnar
+   - Entidades ante las cuales presentar el recurso
+   - Plazos legales (términos de ley)
+   - Formularios requeridos
+   - Pasos detallados del proceso legal
+
+   📌 CAUSALES COMUNES DE IMPUGNACIÓN
+   - Error en identificación del vehículo o conductor
+   - Falla en notificación legal
+   - Prescripción de la infracción
+   - Vicios de procedimiento
+   - Argumentos de defensa técnica
+
+   ⏰ PLAZOS CRÍTICOS
+   - Días hábiles para presentar recurso
+   - Consecuencias de perder los términos legales
+
+TONO: SERIO, LEGAL, DETALLADO, TÉCNICO
+"""
+
+        else:
+            # Fallback genérico
+            return f"""
+Eres un asistente especializado en el Código Nacional de Tránsito de Colombia.
+
+CONTEXTO:
+- El usuario ha solicitado información sobre su infracción de tránsito
+- Tipo de infracción: {tipo_infraccion}
+
+{instrucciones_tools}
+
+3. Estructura del correo:
+   📋 Asunto: "Información sobre tu infracción de tránsito"
+
+   📌 INFRACCIÓN IDENTIFICADA
+   - Artículo violado: [Resultado de buscar_articulos_transito]
+   - Descripción legal
+   - Sanciones establecidas
+
+   📋 INFORMACIÓN GENERAL
+   - Opciones disponibles (pagar, curso, impugnar)
+   - Plazos importantes
+   - Próximos pasos recomendados
+
+TONO: INFORMATIVO, PROFESIONAL, CLARO
+"""
