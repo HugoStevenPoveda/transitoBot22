@@ -2,7 +2,7 @@ import logging
 import time
 from fastapi import APIRouter, HTTPException
 from app.models import AnthropicRequest, AnthropicResponse
-from app.core.dependencies import get_anthropic_service
+from app.core.dependencies import get_anthropic_service, get_tool_manager
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -98,15 +98,57 @@ async def chat_anthropic(
         logger.info(f"📨 Procesando consulta Anthropic Claude")
         logger.info(f"   Intención: {request.intencion}")
         logger.info(f"   Pregunta: {request.pregunta[:100]}...")
+        logger.info(f"   Use tools: {request.use_tools}")
 
         # Generar respuesta
-        answer = anthropic_service.chat_with_context(
-            system_context=request.context.system,
-            user_context=request.context.user,
-            pregunta=request.pregunta,
-            entidades=request.entidades,
-            intencion=request.intencion
-        )
+        if request.use_tools:
+            # Flujo con function calling (tools)
+            logger.info(f"🔧 Usando function calling con tools")
+
+            # Obtener tool manager
+            tool_manager = get_tool_manager()
+
+            # Obtener definiciones de tools
+            if request.available_tools:
+                # Usar solo los tools especificados
+                logger.info(f"   Tools solicitados: {request.available_tools}")
+                tool_definitions = tool_manager.get_tool_definitions(request.available_tools)
+            else:
+                # Usar todos los tools disponibles
+                logger.info(f"   Usando todos los tools disponibles")
+                tool_definitions = tool_manager.get_tool_definitions()
+
+            if not tool_definitions:
+                logger.warning("⚠️ No hay tools disponibles, usando flujo sin tools")
+                answer = anthropic_service.chat_with_context(
+                    system_context=request.context.system,
+                    user_context=request.context.user,
+                    pregunta=request.pregunta,
+                    entidades=request.entidades,
+                    intencion=request.intencion
+                )
+            else:
+                # Llamar a chat_with_tools
+                answer = anthropic_service.chat_with_tools(
+                    system_context=request.context.system,
+                    user_context=request.context.user,
+                    pregunta=request.pregunta,
+                    entidades=request.entidades,
+                    intencion=request.intencion,
+                    tools=tool_definitions,
+                    tool_manager=tool_manager,
+                    max_iterations=5
+                )
+        else:
+            # Flujo original sin tools
+            logger.info(f"💬 Usando flujo sin tools (comportamiento original)")
+            answer = anthropic_service.chat_with_context(
+                system_context=request.context.system,
+                user_context=request.context.user,
+                pregunta=request.pregunta,
+                entidades=request.entidades,
+                intencion=request.intencion
+            )
 
         processing_time = time.time() - start_time
 

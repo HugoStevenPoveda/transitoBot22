@@ -9,6 +9,7 @@ from app.services.response_service import ResponseService
 from app.services.health_service import HealthService
 from app.services.openrouter_service import OpenRouterService
 from app.services.anthropic_service import AnthropicService
+from app.services.tool_manager import ToolManager
 
 logger = logging.getLogger(__name__)
 
@@ -131,4 +132,30 @@ def get_health_service(
     return HealthService(
         db_manager=db_repository,
         llm_service=llm_service
+    )
+
+
+def get_tool_manager(
+    db_repository: ChromaRepository = None,
+    search_service: SearchService = None
+) -> ToolManager:
+    """
+    Dependency para obtener el gestor de herramientas (tools).
+
+    Args:
+        db_repository: Repositorio de ChromaDB (inyectado)
+        search_service: Servicio de búsqueda (inyectado)
+
+    Returns:
+        ToolManager inicializado con las dependencias necesarias
+    """
+    if db_repository is None:
+        db_repository = get_db_repository()
+
+    if search_service is None:
+        search_service = get_search_service(db_repository)
+
+    return ToolManager(
+        db_repository=db_repository,
+        search_service=search_service
     )

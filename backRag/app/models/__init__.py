@@ -53,6 +53,8 @@ class AnthropicRequest(BaseModel):
     pregunta: str
     entidades: List[dict] = []
     intencion: str
+    use_tools: bool = False
+    available_tools: Optional[List[str]] = None
 
 
 class AnthropicResponse(BaseModel):
