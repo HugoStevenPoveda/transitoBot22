@@ -18,7 +18,7 @@ class LLMService:
             api_key: Clave API de Anthropic. Si no se proporciona, se busca en variables de entorno.
         """
         self.historial = []
-        self.api_key = api_key or os.getenv('ANTHROPIC_API_KEY',"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")
+        self.api_key = api_key or os.getenv('ANTHROPIC_API_KEY',"")
 
         if not self.api_key:
             logger.warning("⚠️ No se encontró ANTHROPIC_API_KEY. Usando respuestas básicas.")

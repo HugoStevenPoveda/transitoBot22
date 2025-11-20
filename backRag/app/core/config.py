@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     COLLECTION_NAME: str = "codigo_transito_colombia"
 
     # LLM (Anthropic Claude)
-    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "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")
+    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
     CLAUDE_MODEL: str = "claude-haiku-4-5"
     CLAUDE_MAX_TOKENS: int =2000
     CLAUDE_TEMPERATURE: float = 0.0
