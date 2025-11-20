@@ -13,6 +13,11 @@ function App() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Limpiar sessionStorage al cargar la aplicación
+  useEffect(() => {
+    sessionStorage.clear();
+  }, []);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };

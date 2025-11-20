@@ -154,8 +154,10 @@ class AnthropicService:
             logger.info(f"   Pregunta: {pregunta[:100]}...")
 
             # Construir mensaje del sistema completo
-            system_message = f"{system_context}\n\nContexto del usuario: {user_context}"
-
+            system_message = f"Genera un correo profesional de máximo 150 tokens. No excedas ese límite \n\n {system_context}\n\nContexto del usuario: {user_context}"
+            logger.info("///////"*50)
+            logger.info(f"     system_message : {  system_message }...")
+            logger.info("///////"*50)
             # Construir mensaje del usuario con metadatos
             user_message = f"Pregunta: {pregunta}\n"
             if entidades:

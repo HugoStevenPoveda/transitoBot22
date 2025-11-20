@@ -41,6 +41,12 @@ class ToolManager:
                 )
                 logger.info("✅ Tool 'buscar_articulos_transito' inicializado")
 
+            # Inicializar EmailSenderTool
+            if "enviar_email" in AVAILABLE_TOOLS:
+                tool_class = AVAILABLE_TOOLS["enviar_email"]
+                self._tool_instances["enviar_email"] = tool_class()
+                logger.info("✅ Tool 'enviar_email' inicializado")
+
             # Aquí se pueden agregar más tools en el futuro
 
             logger.info(f"🔧 ToolManager inicializado con {len(self._tool_instances)} tool(s)")

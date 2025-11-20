@@ -15,6 +15,9 @@ services:
       - ./backRag/data:/app/data
     env_file:
       - ./backRag/.env.production
+    depends_on:
+      apistool:
+        condition: service_healthy
     networks:
       - appchat-network
     healthcheck:
@@ -23,6 +26,28 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+
+  # ============================================
+  # ApiTool - Servicio de envío de emails
+  # ============================================
+  apistool:
+    build:
+      context: ./apistool
+      dockerfile: Dockerfile
+    container_name: appchat-apistool
+    restart: unless-stopped
+    ports:
+      - "8076:8076"
+    env_file:
+      - ./apistool/.env.production
+    networks:
+      - appchat-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8076/health').read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   # ============================================
   # RASA - Bot Conversacional

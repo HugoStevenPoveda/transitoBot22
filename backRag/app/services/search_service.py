@@ -34,8 +34,8 @@ class SearchService:
     def hybrid_search(
         self,
         consulta: str,
-        n_resultados: int = 3,
-        umbral_confianza: float = 0.5
+        n_resultados: int = 1,
+        umbral_confianza: float = 0.7
     ) -> Dict:
         """
         Realiza búsqueda híbrida combinando vectorial y palabras clave.

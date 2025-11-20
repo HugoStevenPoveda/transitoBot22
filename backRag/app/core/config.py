@@ -30,8 +30,8 @@ class Settings(BaseSettings):
     # LLM (Anthropic Claude)
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "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")
     CLAUDE_MODEL: str = "claude-haiku-4-5"
-    CLAUDE_MAX_TOKENS: int = 800
-    CLAUDE_TEMPERATURE: float = 0.3
+    CLAUDE_MAX_TOKENS: int =2000
+    CLAUDE_TEMPERATURE: float = 0.0
 
     # OpenRouter
     OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "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")

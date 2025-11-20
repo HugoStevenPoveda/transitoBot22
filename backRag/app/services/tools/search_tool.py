@@ -32,11 +32,6 @@ class HybridSearchTool(BaseTool):
             "- Multas y sanciones\n"
             "- Límites de velocidad\n"
             "- Documentos obligatorios del vehículo\n"
-            "- Infracciones y penalidades\n"
-            "- Pico y placa\n"
-            "- Uso del celular al conducir\n"
-            "- Semáforos y señales de tránsito\n"
-            "- Cualquier tema relacionado con el código de tránsito terrestre colombiano"
         )
 
     def get_definition(self) -> Dict[str, Any]:
@@ -116,7 +111,7 @@ class HybridSearchTool(BaseTool):
             # Ejecutar búsqueda híbrida
             resultados = self.search_service.hybrid_search(
                 consulta=consulta,
-                n_resultados=n_resultados,
+                n_resultados=1,
                 umbral_confianza=umbral_confianza
             )
 
