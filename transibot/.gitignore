@@ -1,0 +1,16 @@
+# Environment variables con credenciales
+.env
+
+# Modelos RASA (archivos grandes)
+models/*.tar.gz
+
+# Backups
+backups/
+*.zip
+
+# Logs
+logs/
+*.log
+
+# Docker
+.docker/

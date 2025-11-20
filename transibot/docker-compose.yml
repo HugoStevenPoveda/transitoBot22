@@ -1,0 +1,202 @@
+services:
+  # ============================================
+  # BackRag - Sistema RAG con ChromaDB y Claude
+  # ============================================
+  backrag:
+    image: hugostevenpoveda692/transibot-backrag:latest
+    container_name: transibot-backrag
+    restart: unless-stopped
+    ports:
+      - "${BACKRAG_PORT:-8000}:8000"
+    volumes:
+      # Persistir ChromaDB entre reinicios
+      - backrag-data:/app/data
+    environment:
+      # Anthropic API
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      # ChromaDB
+      - CHROMA_DB_PATH=/app/data/chroma_db
+      # Server
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DEBUG=false
+      # Embedding Model
+      - EMBEDDING_MODEL=paraphrase-multilingual-MiniLM-L12-v2
+      # Search
+      - DEFAULT_MAX_RESULTS=3
+      - DEFAULT_CONFIDENCE_THRESHOLD=0.4
+      # Claude AI
+      - CLAUDE_MODEL=claude-haiku-4-5
+      - CLAUDE_MAX_TOKENS=1024
+      - CLAUDE_TEMPERATURE=0.7
+      # Email Service
+      - EMAIL_SERVICE_URL=http://transibot-apistool:8076/api/v1/email/send
+    depends_on:
+      apistool:
+        condition: service_healthy
+    networks:
+      - transibot-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health').read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # ============================================
+  # ApiTool - Servicio de envío de emails
+  # ============================================
+  apistool:
+    image: hugostevenpoveda692/transibot-apistool:latest
+    container_name: transibot-apistool
+    restart: unless-stopped
+    ports:
+      - "${APISTOOL_PORT:-8076}:8076"
+    environment:
+      # App Configuration
+      - APP_NAME=transibot-email
+      - APP_VERSION=0.1.0
+      - DEBUG=false
+      # Server
+      - HOST=0.0.0.0
+      - PORT=8076
+      # CORS
+      - CORS_ORIGINS=["http://transibot-backrag:8000","http://transibot-routerback:8080"]
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      # SMTP Configuration (REQUIRED)
+      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_FROM_EMAIL=${SMTP_FROM_EMAIL}
+      - SMTP_FROM_NAME=${SMTP_FROM_NAME:-Transibot}
+    networks:
+      - transibot-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8076/health').read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ============================================
+  # RASA - Bot Conversacional
+  # ============================================
+  rasa:
+    image: hugostevenpoveda692/transibot-rasa:latest
+    container_name: transibot-rasa
+    restart: unless-stopped
+    ports:
+      - "${RASA_PORT:-5005}:5005"        # RASA Server
+      - "${RASA_ACTIONS_PORT:-5055}:5055"  # RASA Actions Server
+    volumes:
+      # IMPORTANTE: Modelos pre-entrenados están en ./models/
+      # El contenedor NO entrena, solo consume el modelo del volumen
+      - ./models:/app/models
+    environment:
+      # RASA Model
+      - RASA_MODEL_PATH=/app/models/20251119-154152-denim-dove.tar.gz
+      # Ports
+      - RASA_PORT=5005
+      - ACTIONS_PORT=5055
+      # Endpoints
+      - ACTION_ENDPOINT_URL=http://localhost:5055/webhook
+      # CORS
+      - RASA_CORS_ORIGINS=*
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - NLU_LOG_LEVEL=INFO
+      # Session
+      - SESSION_EXPIRATION_TIME=60
+      # Telemetry
+      - RASA_TELEMETRY_ENABLED=false
+      - CORE_DEBUG_MODE=false
+    networks:
+      - transibot-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5005/').read()"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+  # ============================================
+  # RouterBack - Orquestador FastAPI
+  # ============================================
+  routerback:
+    image: hugostevenpoveda692/transibot-routerback:latest
+    container_name: transibot-routerback
+    restart: unless-stopped
+    ports:
+      - "${ROUTERBACK_PORT:-8080}:8080"
+    environment:
+      # App
+      - APP_NAME=Transibot Chat Orchestrator
+      - DEBUG=false
+      # Server
+      - HOST=0.0.0.0
+      - PORT=8080
+      # CORS
+      - CORS_ORIGINS=["http://localhost:5173","http://transibot-frontend:80","http://localhost"]
+      # BackRag
+      - BACKRAG_URL=http://transibot-backrag:8000
+      - BACKRAG_TIMEOUT=10
+      # RASA
+      - RASA_URL=http://transibot-rasa:5005
+      - RASA_WEBHOOK_PATH=/webhooks/rest/webhook
+      - RASA_TRACKER_PATH=/conversations
+      - RASA_TIMEOUT=30
+    depends_on:
+      backrag:
+        condition: service_healthy
+      rasa:
+        condition: service_healthy
+    networks:
+      - transibot-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health').read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ============================================
+  # Frontend - React + Vite + Nginx
+  # ============================================
+  frontend:
+    image: hugostevenpoveda692/transibot-frontend:latest
+    container_name: transibot-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"  # Mapear puerto configurado a 80 (nginx)
+    environment:
+      # API Configuration
+      - VITE_API_BASE_URL=http://localhost:${ROUTERBACK_PORT:-8080}
+      - VITE_USE_MOCK_API=false
+      - VITE_DEBUG_MODE=false
+    depends_on:
+      - routerback
+    networks:
+      - transibot-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+# ============================================
+# Networks
+# ============================================
+networks:
+  transibot-network:
+    driver: bridge
+    name: transibot-network
+
+# ============================================
+# Named Volumes
+# ============================================
+volumes:
+  backrag-data:
+    name: transibot-backrag-data
