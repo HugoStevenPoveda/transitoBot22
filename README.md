@@ -1,3 +1,11 @@
+
+<img width="439" height="524" alt="image" src="https://github.com/user-attachments/assets/5ab238b3-7c57-4e16-a1a8-7d3fb49d322c" />
+
+
+
+
+
+
 # AppChat - Sistema de Chat con Fallback RAG
 
 Sistema de chat conversacional que integra RASA con fallback automático a un servicio RAG para consultas sobre el Código de Tránsito de Colombia.
